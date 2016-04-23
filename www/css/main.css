@@ -1,0 +1,399 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,900italic,900,700italic,700,400italic,300italic,300,100italic,100);
+@font-face {
+  font-family: 'Hanken';
+  src: url("../font/Hanken-Light.eot?#iefix") format("embedded-opentype"), url("../font/Hanken-Light.woff") format("woff"), url("../font/Hanken-Light.ttf") format("truetype"), url("../font/Hanken-Light.svg#Hanken-Light") format("svg");
+  font-weight: 300;
+  font-style: normal; }
+@font-face {
+  font-family: 'Hanken';
+  src: url("../font/Hanken-Book.eot?#iefix") format("embedded-opentype"), url("../font/Hanken-Book.woff") format("woff"), url("../font/Hanken-Book.ttf") format("truetype"), url("../font/Hanken-Book.svg#Hanken-Book") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+::-webkit-scrollbar {
+  display: none; }
+
+/*::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}*/
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+#view {
+  /*width: 100%;
+  height: 100vh;
+  background: $maincolor;*/ }
+  #view .ColorForm input {
+    width: 100%; }
+  #view .ColorForm input[type="submit"] {
+    border: none;
+    background: #729ec8;
+    border-bottom: 3px solid black; }
+  #view .ColorList {
+    width: 100%;
+    height: auto; }
+    #view .ColorList .color {
+      width: 95%;
+      height: auto;
+      margin: auto;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: row;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-flex-wrap: wrap;
+          -ms-flex-wrap: wrap;
+              flex-wrap: wrap;
+      box-sizing: content-box;
+      -webkit-box-pack: start;
+      -webkit-justify-content: flex-start;
+          -ms-flex-pack: start;
+              justify-content: flex-start;
+      padding-left: 0.8em; }
+      #view .ColorList .color .colorli {
+        /*flex-grow:1;*/
+        -webkit-align-self: auto;
+            -ms-flex-item-align: auto;
+                align-self: auto;
+        width: 30%;
+        height: 6.5em;
+        margin: 1%;
+        margin-top: 1em;
+        overflow: hidden;
+        position: relative; }
+        #view .ColorList .color .colorli .colorFeed {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          -webkit-transition: all 0.5s  ease;
+                  transition: all 0.5s  ease;
+          z-index: 10;
+          cursor: pointer; }
+          #view .ColorList .color .colorli .colorFeed p {
+            background: rgba(225, 253, 255, 0.5);
+            width: 100%;
+            font-size: 0.8em;
+            text-align: center;
+            opacity: 0.4;
+            padding: 0.2em 0; }
+        #view .ColorList .color .colorli .cdel {
+          cursor: pointer;
+          width: 100%;
+          height: 40px;
+          background: #e85037;
+          text-align: center;
+          line-height: 40px;
+          font-size: 0.8em;
+          color: white;
+          position: absolute;
+          bottom: 0; }
+  #view .fontList {
+    width: 100%; }
+    #view .fontList .fontFeed {
+      position: relative;
+      width: 100vw;
+      overflow: hidden; }
+      #view .fontList .fontFeed .des {
+        position: relative;
+        cursor: pointer; }
+        #view .fontList .fontFeed .des .dess {
+          width: 100%;
+          background: #e2efed;
+          height: auto;
+          padding: 1em 2em;
+          -webkit-transition: all 0.7s ease;
+                  transition: all 0.7s ease; }
+          #view .fontList .fontFeed .des .dess p {
+            width: 70%;
+            margin: 1em;
+            font-size: 0.7em;
+            font-weight: 300;
+            line-height: 1.7em;
+            color: rgba(0, 0, 0, 0.8); }
+        #view .fontList .fontFeed .des .delFont {
+          height: 100%;
+          width: 5em;
+          background: #e85037;
+          position: absolute;
+          right: 0;
+          top: 0;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -webkit-flex-direction: row;
+              -ms-flex-direction: row;
+                  flex-direction: row;
+          -webkit-box-align: center;
+          -webkit-align-items: center;
+              -ms-flex-align: center;
+                  align-items: center;
+          color: #ffffff;
+          font-size: 0.8em;
+          font-weight: 300;
+          z-index: -1; }
+          #view .fontList .fontFeed .des .delFont p {
+            text-align: center;
+            width: 100%; }
+      #view .fontList .fontFeed a {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 40px;
+        background: #516e99;
+        color: #e1e1e1;
+        font-size: 0.8em;
+        text-align: center;
+        line-height: 40px;
+        font-weight: 300; }
+  #view .articleList {
+    width: 100%;
+    height: 100%;
+    list-style-position: outside;
+    background: rgba(183, 216, 211, 0.4);
+    overflow-x: hidden; }
+    #view .articleList li {
+      list-style: none;
+      border-bottom: 1px solid rgba(81, 110, 153, 0.1);
+      border-top: 1px solid rgba(255, 250, 250, 0.5);
+      /*border: 1px solid black;*/
+      margin-top: 1.5px;
+      padding: 2.1em 0 2.1em 1em;
+      cursor: pointer;
+      font-size: 0.8em;
+      width: 100%
+      /*box-shadow:  1px 1px 4px rgba(81, 110, 153, 0.2);*/ }
+      #view .articleList li::before {
+        content: ">   ";
+        width: 3px;
+        height: 3px;
+        border-radius: 1.5px; }
+    #view .articleList .upBlur {
+      /*			position: absolute;
+      			width: 105%;
+      			left: 0;
+      			top: 80px;
+      			height:120px;
+      			background: red;
+      			/*filter: blur(20px);*/ }
+    #view .articleList .downBlur {
+      /*			position: absolute;
+      			width: 105%;
+      			height:120px;
+      			top: 300px;
+      			bottom: 100px;
+      			left: 0px;
+      			background: red;
+      			filter: blur(20px);*/ }
+  #view .feeding {
+    overflow: hidden
+    /*		h2{
+    			width: 50px;
+    			background:#b7d8d3;
+    			border-bottom: 2px solid #516e99;
+    			border-top: 2px solid #516e99;
+    			height: 50px;
+    			line-height: 50px;
+    			text-align: center;
+    			position: fixed;
+    			top: 100px;
+    			right: 0;
+    		}*/ }
+    #view .feeding h1 {
+      width: 100%;
+      height: auto;
+      padding: 1em 0 1em 2em;
+      background: #b6d6d1; }
+    #view .feeding p {
+      padding: 2em;
+      font-size: 0.8em;
+      font-weight: 300;
+      line-height: 1.8em; }
+
+.todo {
+  /*width: 100%;*/
+  height: 55px;
+  font-size: 0.8em;
+  position: relative;
+  border-bottom: 0.4px solid rgba(81, 110, 153, 0.5);
+  cursor: pointer; }
+  .todo div:first-child {
+    line-height: 55px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+    width: 100%;
+    -webkit-transition: all 700ms cubic-bezier(0.17, 0.67, 0.55, 1.29);
+            transition: all 700ms cubic-bezier(0.17, 0.67, 0.55, 1.29);
+    z-index: 111;
+    background: #dfe8eb; }
+    .todo div:first-child p {
+      -webkit-box-flex: 2;
+      -webkit-flex: 2;
+          -ms-flex: 2;
+              flex: 2;
+      display: inline;
+      font-size: 0.8em;
+      width: auto;
+      margin-left: 10px; }
+    .todo div:first-child .pline {
+      text-decoration: line-through; }
+    .todo div:first-child p:last-child {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
+      text-align: right;
+      margin-right: 1em; }
+    .todo div:first-child > div:first-child {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #b7d8d3;
+      margin-left: 10px;
+      margin-top: 19px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      z-index: 100; }
+      .todo div:first-child > div:first-child div {
+        background: transparent; }
+      .todo div:first-child > div:first-child .checked {
+        width: 10px;
+        height: 10px;
+        background: #141b35;
+        z-index: 100;
+        left: 2.5px;
+        top: 2.5px
+        /*position: relative;*/ }
+  .todo .del {
+    width: 100px;
+    background: #e85037;
+    line-height: 55px;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    /*opacity: 0.3;*/
+    z-index: -1;
+    -webkit-transition: all 1s 1s ease;
+            transition: all 1s 1s ease; }
+    .todo .del p {
+      color: white;
+      text-align: center; }
+  .todo .edi {
+    width: 100px;
+    background: #516e99;
+    line-height: 55px;
+    position: absolute;
+    top: 0;
+    left: 0px;
+    /*opacity: 0.3;*/
+    z-index: -1
+    /*transition: all 1s  ease;*/ }
+    .todo .edi p {
+      color: white;
+      text-align: center; }
+
+.center {
+  /*		msTransform: "translate(-20px, 0)",
+  			webkitTransformt: "translate(-20px, 0)",
+  			transform: "translate(-20px, 0)",
+  			*/
+  font-family: 'Hanken';
+  font-weight: 300;
+  -webkit-transform: translate(-20px, 0);
+      -ms-transform: translate(-20px, 0);
+          transform: translate(-20px, 0);
+  color: #232832; }
+
+/*****************************************************************************
+*                                 animation                                *
+****************************************************************************
+*/
+@-webkit-keyframes showup {
+  from {
+    border-radius: 50%;
+    opacity: 0;
+    -webkit-transform: scale(0);
+            transform: scale(0); }
+  70% {
+    border-radius: 20%; } }
+@keyframes showup {
+  from {
+    border-radius: 50%;
+    opacity: 0;
+    -webkit-transform: scale(0);
+            transform: scale(0); }
+  70% {
+    border-radius: 20%; } }
+::-webkit-input-placeholder {
+  color: rgba(183, 216, 211, 0.4); }
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: rgba(183, 216, 211, 0.4); }
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: rgba(183, 216, 211, 0.4); }
+
+:-ms-input-placeholder {
+  color: rgba(183, 216, 211, 0.4); }
+
+/*# sourceMappingURL=main.css.map */

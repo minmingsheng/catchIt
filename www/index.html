@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/createjs-2015.11.26.min.js"></script>
+    <script src="js/mobile.js"></script>
+
+</head>
+
+<style>
+    body {margin:0px; padding:0px; background-color:#000; overflow:hidden;}
+    /*#myCanvas {position:absolute; left:0px; top:0px;}*/
+</style>
+<body>
+    <canvas  id="myCanvas"></canvas>
+    <script type="text/javascript">
+        var stage = new createjs.Stage("myCanvas");
+        var swipe;
+        createjs.Ticker.setFPS(30);
+        createjs.Ticker.addEventListener("tick",function(event){
+            stage.update(event);
+        });
+        var stageW;
+        var stageH;
+        var clickTimes=0;
+        stageW = stage.canvas.width= isNaN(window.innerWidth) ? window.clientWidth : window.innerWidth;
+        stageH = stage.canvas.height= isNaN(window.innerHeight) ? window.clientHeight : window.innerHeight;
+
+        console.log(stageH);
+        console.log(stageW);
+        createjs.Touch.enable(stage);
+
+          var spriteSheet = new createjs.SpriteSheet({
+                framerate: 30,
+                "images": ["spritesheet_grant.png"],
+                "frames": {"regX": 82, "height": 292, "count": 64, "regY": 0, "width": 165},
+                // define two animations, run (loops, 1.5x speed) and jump (returns to run):
+                "animations": {
+                    "run": [0, 25, "run", 1.5],
+                    "jump": [26, 63, "run"]
+                }
+            });
+          grant = new createjs.Sprite(spriteSheet, "run");
+          grant.x = window.innerWidth/10;
+
+          stage.addChild(grant);
+
+
+    
+        /*text*/
+        /*>>>> Crazy boy <<<<*/
+        var title1 = new createjs.Text('>>>> CHASE <<<<',"21px arial","#ccc");
+        title1.textAlign = "center";
+        title1.textBaseline = "middle";
+        title1.x = stageW/2;
+        title1.y = stageW/15;
+        stage.addChild(title1);
+        /*| Crazy boy |'*/
+        var title2 = new createjs.Text('|  CHASE  |',"55px arial","#ccc");
+        title2.textAlign = "center";
+        title2.textBaseline = "middle";
+        title2.x = stageW/2;
+        title2.y = stageW/10;
+        stage.addChild(title2);
+
+        /*catch it*/
+        var title2 = new createjs.Text('Catch Blue Ball',"55px arial","#ccc");
+        title2.textAlign = "center";
+        title2.textBaseline = "middle";
+        title2.x = stageW/2;
+        title2.y = stageW/6;
+        stage.addChild(title2);
+
+        /*in*/
+        var title2 = new createjs.Text('in',"55px arial","#ccc");
+        title2.textAlign = "center";
+        title2.textBaseline = "middle";
+        title2.x = stageW/2;
+        title2.y = stageW/4;
+        stage.addChild(title2);
+
+        /*2*/
+        var title3 = new createjs.Text('0',"55px arial","#edf5ff");
+        title3.textAlign = "center";
+        title3.text = clickTimes;
+        title3.textBaseline = "middle";
+        title3.x = stageW/2-70;
+        title3.y = stageW/3;
+        stage.addChild(title3);
+
+        /*staep*/
+        var title4 = new createjs.Text('step!',"55px arial","#ccc");
+        title4.textAlign = "center";
+        title4.textBaseline = "middle";
+        title4.x = stageW/2+30;
+        title4.y = stageW/3;
+        stage.addChild(title4);
+
+
+
+        /*put circle*/
+        var circleContainer = new createjs.Container();
+        circleContainer.x = 73;
+        circleContainer.y = stageW/2;
+        stage.addChild(circleContainer);
+
+        /*circle class*/
+        function Circle(){
+            createjs.Shape.call(this);
+            this.setCircleType = function(type){
+                this._circleType = type;
+                switch (type){
+                    case Circle.TYPE_UNSELECTED:
+                        this.setColor("#eee9ea");
+                        // this.removeAllChildren()
+                        // this.addChild(cc)
+                        break;
+                    case Circle.TYPE_SELECTED:
+                        this.setColor("#FF9F37");
+                        // this.removeAllChildren()
+                        // this.addChild(dd)
+                        break;
+                    case Circle.TYPE_CAT:
+                        this.setColor("#0086D6");
+                        // this.addChild(grant)
+                        // this.removeAllChildren()
+                        // this.addChild(grant)
+                        break;
+                }
+            }
+
+            this.setColor = function (colorString){
+                this.graphics.beginFill(colorString);
+                /*circle size!!!*/
+                this.graphics.drawCircle(0,0,44);
+            }
+            this.getCircleType = function(){
+                return this._circleType;
+            }
+            this.setCircleType(1);
+        }
+        Circle.prototype = new createjs.Shape();
+        Circle.TYPE_UNSELECTED = 1;
+        Circle.TYPE_SELECTED = 2;
+        Circle.TYPE_CAT = 3;
+
+
+        var circleArr = [[],[],[],[],[],[],[],[],[]];
+        var currentCat;
+        var MOVE_NONE=-1,MOVE_LEFT = 0,MOVE_UP_LEFT=1,MOVE_UP_RIGHT= 2,MOVE_RIGHT= 3,MOVE_DOWN_RIGHT= 4,MOVE_DOWN_LEFT=5;
+
+        function getMoveDir(cat){
+
+            var distanceMap=[];
+            //left
+            var can = true;
+            for(var x = cat.indexX;x>=0;x--){
+                if(circleArr[x][cat.indexY].getCircleType() == Circle.TYPE_SELECTED){
+                    can = false;
+                    distanceMap[MOVE_LEFT] = cat.indexX-x;
+                    break;
+                }
+            }
+            if(can){
+                return MOVE_LEFT;
+            }
+            //left up
+            can = true;
+            var x = cat.indexX,y = cat.indexY;
+            while(true){
+                if(circleArr[x][y].getCircleType() == Circle.TYPE_SELECTED){
+                    can = false;
+                    distanceMap[MOVE_UP_LEFT] = cat.indexY-y;
+                    break;
+                }
+                if(y%2 == 0){
+                    x--;
+                }
+                y--
+                if(y<0||x<0){
+                    break;
+                }
+            }
+            if(can){
+                return MOVE_UP_LEFT;
+            }
+            //right up
+            can = true;
+            x = cat.indexX,y = cat.indexY
+            while(true){
+                if(circleArr[x][y].getCircleType() == Circle.TYPE_SELECTED){
+                    can = false;
+                    distanceMap[MOVE_UP_RIGHT] = cat.indexY - y;
+                    break;
+                }
+
+                if(y%2 ==1){
+                    x++
+                }
+                y--;
+                if(y<0 || x>8){
+                    break
+                }
+            }
+
+            if(can){
+                return MOVE_UP_RIGHT;
+            }
+
+            //right
+            can = true;
+            for(var x = cat.indexX;x<9;x++){
+                if(circleArr[x][cat.indexY].getCircleType() == Circle.TYPE_SELECTED){
+                    can = false;
+                    distanceMap[MOVE_RIGHT] = x - cat.indexX;
+                    break;
+                }
+            }
+            if(can){
+                return MOVE_RIGHT;
+            }
+            //right down
+            can = true;
+            x = cat.indexX,y = cat.indexY;
+            while(true){
+                if(circleArr[x][y].getCircleType() == Circle.TYPE_SELECTED){
+                    can = false;
+                    distanceMap[MOVE_DOWN_RIGHT] = y-cat.indexY;
+                    break;
+                }
+                if(y%2 == 1){
+                    x++;
+                }
+                y++;
+                if(y>8 ||x>8){
+                    break;
+                }
+            }
+            if(can){
+                return MOVE_DOWN_RIGHT;
+            }
+            //left down
+            can = true;
+            x = cat.indexX,y=cat.indexY;
+            while(true){
+                if(circleArr[x][y].getCircleType() == Circle.TYPE_SELECTED){
+                    can = false;
+                    distanceMap[MOVE_DOWN_LEFT] = y-cat.indexY;
+                    break;
+                }
+                if(y%2==0){
+                    x--;
+                }
+                y++;
+                if(y>8||x<0){
+                    break;
+                }
+            }
+            if(can){
+                return MOVE_DOWN_LEFT;
+            }
+            var maxDir = -1,maxValue= -1;
+            for(var dir = 0;dir <distanceMap.length;dir++){
+                if(distanceMap[dir]>maxValue){
+                    maxValue = distanceMap[dir];
+                    maxDir = dir;
+                }
+            }
+            if(maxValue>1){
+                return maxDir;
+            }else{
+                return MOVE_NONE;
+            }
+        }
+
+        function circleClicked(event){
+            grant.x = Math.random()*window.innerWidth-10+20;
+            console.log(event.target);
+            clickTimes++;
+            title3.text = clickTimes;
+            if(event.target.getCircleType() != Circle.TYPE_CAT ){
+                event.target.setCircleType(Circle.TYPE_SELECTED);
+            }else
+            {
+                return;
+            }
+            if(currentCat.indexX == 0 || currentCat.indexX==8 ||currentCat.indexY == 0 || currentCat.indexY==8){
+                var end = new createjs.Text('--------END!--------',"55px arial","gray");
+                end.textAlign = "center";
+                end.textBaseline = "middle";
+                end.x = stageW/2;
+                end.y = stageH/1.2;
+                stage.addChild(end);
+                // alert("lose");
+                var swipe = new createjs.Text('<play again',"55px arial","#4d4d4d");
+                swipe.alpha = 0.5;
+                swipe.textAlign = "center";
+                swipe.textBaseline = "middle";
+                swipe.x = stageW/2;
+                swipe.y = stageH/1.1;
+
+                var shape = new createjs.Shape();
+                shape.graphics.beginFill("#e6e6e6").drawRect(0, 0, 0.75*window.innerWidth, 100);
+                stage.addChild(shape);
+                shape.y=window.innerHeight-200;
+                shape.x=window.innerWidth/2;
+                shape.regX=0.75*window.innerWidth/2;
+                mobile.swipe(stage);
+                stage.addEventListener("mousedown", function(e){
+                    location.reload();
+                })
+                // shape.addEventListener("click", function(){
+                //     console.log("sadas");
+                // })
+                stage.addChild(swipe);
+                return;
+            }
+
+            var dir = getMoveDir(currentCat)
+            switch (dir){
+                case MOVE_LEFT:
+                    currentCat.setCircleType(Circle.TYPE_UNSELECTED);
+                    currentCat = circleArr[currentCat.indexX-1][currentCat.indexY];
+                    currentCat.setCircleType(Circle.TYPE_CAT);
+                    break;
+                case MOVE_UP_LEFT:
+                    currentCat.setCircleType(Circle.TYPE_UNSELECTED);
+                    currentCat = circleArr[currentCat.indexY%2?currentCat.indexX:currentCat.indexX-1][currentCat.indexY-1];
+                    currentCat.setCircleType(Circle.TYPE_CAT);
+                    break;
+                case MOVE_UP_RIGHT:
+                    currentCat.setCircleType(Circle.TYPE_UNSELECTED);
+                    currentCat = circleArr[currentCat.indexY%2?currentCat.indexX+1:currentCat.indexX][currentCat.indexY-1];
+                    currentCat.setCircleType(Circle.TYPE_CAT);
+                    break;
+                case MOVE_RIGHT:
+                    currentCat.setCircleType(Circle.TYPE_UNSELECTED);
+                    currentCat = circleArr[currentCat.indexX+1][currentCat.indexY];
+                    currentCat.setCircleType(Circle.TYPE_CAT);
+                    break;
+                case MOVE_DOWN_RIGHT:
+                    currentCat.setCircleType(Circle.TYPE_UNSELECTED);
+                    currentCat = circleArr[currentCat.indexY%2?currentCat.indexX+1:currentCat.indexX][currentCat.indexY+1];
+                    currentCat.setCircleType(Circle.TYPE_CAT);
+                    break;
+                case MOVE_DOWN_LEFT:
+                    currentCat.setCircleType(Circle.TYPE_UNSELECTED);
+                    currentCat = circleArr[currentCat.indexY%2?currentCat.indexX:currentCat.indexX-1][currentCat.indexY+1];
+                    currentCat.setCircleType(Circle.TYPE_CAT);
+                    break;
+                default :
+                    var end = new createjs.Text('--------WIN!--------',"55px arial","#edf5ff");
+                    end.textAlign = "center";
+                    end.textBaseline = "middle";
+                    end.x = stageW/2;
+                    end.y = stageH/1.2;
+                    stage.addChild(swipe);
+                    swipe = new createjs.Text('play again',"55px arial","#303030");
+                    swipe.textAlign = "center";
+                    swipe.textBaseline = "middle";
+                    swipe.x = stageW/2;
+                    swipe.y = stageH/1.1;
+                    stage.addEventListener("mousedown", function(e){
+                        location.reload();
+                    })
+                    var shape = new createjs.Shape();
+                    shape.graphics.beginFill("#e6e6e6").drawRect(0, 0, 0.75*window.innerWidth, 100);
+                    stage.addChild(shape);
+                    shape.y=window.innerHeight-200;
+                    shape.x=window.innerWidth/2;
+                    shape.regX=0.75*window.innerWidth/2;
+
+                    stage.addChild(swipe);
+                    
+
+            }
+
+
+
+        }
+
+        function addCircles(){
+            for(var indexY=0;indexY<9;indexY++){
+                for(var indexX = 0;indexX<9;indexX++){
+                    var c = new Circle();
+                    circleContainer.addChild(c);
+                    circleArr[indexX][indexY] = c;
+                    c.indexX = indexX;
+                    c.indexY = indexY;
+                    c.x = indexY%2?indexX*100+25:indexX*100;
+                    c.y = indexY*100;
+
+                    if(indexX==4&&indexY==4){
+                        c.setCircleType(3);
+                        currentCat = c;
+                    }else if(Math.random()<0.1){
+                        c.setCircleType(Circle.TYPE_SELECTED);
+                    }
+                    c.addEventListener("click",circleClicked);
+                    c.addEventListener("touch",circleClicked);
+                }
+            }
+        }
+
+
+
+        addCircles();
+
+    </script>
+</body>
+</html>
